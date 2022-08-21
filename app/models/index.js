@@ -19,8 +19,14 @@ const sequelize = new Sequelize(
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+//import models that need define a relationship
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
+db.rutine = require("../models/rutine.model.js")(sequelize, Sequelize);
+db.exersise = require("../models/exersise.model.js")(sequelize, Sequelize);
+db.weight = require("../models/weight.model.js")(sequelize, Sequelize);
+
+//Many to Many relationship user-roles
 db.role.belongsToMany(db.user, {
   through: "user_roles",
   foreignKey: "roleId",
@@ -31,5 +37,35 @@ db.user.belongsToMany(db.role, {
   foreignKey: "userId",
   otherKey: "roleId"
 });
-db.ROLES = ["user", "admin", "moderator"];
+
+//Many to Many relationship user-rutines
+db.rutine.belongsToMany(db.user, {
+  through: "user_rutines",
+  foreignKey: "rutineId",
+  otherKey: "userId"
+});
+db.user.belongsToMany(db.rutine, {
+  through: "user_rutines",
+  foreignKey: "userId",
+  otherKey: "rutineId"
+});
+
+//Many to Many relationship rutine-exersises
+db.exersise.belongsToMany(db.rutine, {
+  through: "rutine_exersises",
+  foreignKey: "exersiseId",
+  otherKey: "rutineId"
+});
+db.rutine.belongsToMany(db.exersise, {
+  through: "rutine_exersises",
+  foreignKey: "rutineId",
+  otherKey: "exersiseId"
+});
+
+//One to one relationship weight-user
+db.weight.belongsTo(db.user);
+
+//One to one relationship weight-exersise
+db.weight.belongsTo(db.exersise);
+db.ROLES = ["user", "admin"];
 module.exports = db;
