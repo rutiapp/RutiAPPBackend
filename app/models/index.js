@@ -65,6 +65,11 @@ db.rutine.belongsToMany(db.exersise, {
 //One to one relationship weight-user
 db.weight.belongsTo(db.user);
 
+//One to one relationship weight-user
+db.exersise.belongsTo(db.user, {
+  as: "creator"
+});
+
 //One to one relationship weight-exersise
 db.weight.belongsTo(db.exersise);
 db.ROLES = ["user", "admin"];
