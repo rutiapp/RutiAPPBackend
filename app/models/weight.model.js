@@ -5,7 +5,7 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
         primaryKey: true
       },
-      cantidad_kg: {
+      quantity_kg: {
         type: Sequelize.DECIMAL(10,1)
       }
     });

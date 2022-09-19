@@ -72,5 +72,6 @@ db.exersise.belongsTo(db.user, {
 
 //One to one relationship weight-exersise
 db.weight.belongsTo(db.exersise);
+
 db.ROLES = ["user", "admin"];
 module.exports = db;
