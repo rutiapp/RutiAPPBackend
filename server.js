@@ -5,7 +5,7 @@ const dotenv = require('dotenv')
 //using .env variables
 dotenv.config()
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: process.env.FRONT_APP+":"+process.env.FRONT_APP_PORT
 };
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
@@ -24,7 +24,7 @@ app.listen(PORT, () => {
 // mapping DB
 const db = require("./app/models");
 const Role = db.role;
-db.sequelize.sync( {force: true} ).then(() => {
+db.sequelize.sync().then(() => {
   console.log('Drop and Resync Db');
   initial();
 });
