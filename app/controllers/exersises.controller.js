@@ -1,5 +1,6 @@
 const db = require("../models");
 const Exersises = db.exersise;
+const Weights = db.weight
 const Op = db.Sequelize.Op;
 // Create and Save a new Exersise
 exports.create = (req, res) => {
@@ -30,7 +31,7 @@ exports.create = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Tutorial."
+          err.message || "Some error occurred while creating the Exersise."
       });
     });
   
@@ -44,7 +45,7 @@ exports.findAll = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving exersises."
       });
     });
 };
@@ -52,8 +53,8 @@ exports.findAll = (req, res) => {
 // Retrieve all Exersises from the database.
 exports.findAllByCreator = (req, res) => {
 
-    const creatorId = req.query.creatorId;
-  var condition = creatorId ? { title: creatorId } : null;
+  const creatorId = req.query.creatorId;
+  var condition = creatorId ? { creatorId: creatorId } : null;
   Exersises.findAll({ where: condition })
     .then(data => {
       res.send(data);
@@ -61,7 +62,7 @@ exports.findAllByCreator = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving exersises."
       });
     });
   
@@ -90,15 +91,15 @@ const id = req.params.id;
 exports.update = (req, res) => {
   
 };
-// Delete a Tutorial with the specified id in the request
+// Delete a Exersise with the specified id in the request
 exports.delete = (req, res) => {
   
 };
-// Delete all Tutorials from the database.
+// Delete all Exersise from the database.
 exports.deleteAll = (req, res) => {
   
 };
-// Find all published Tutorials
+// Find all published Exersise
 exports.findAllPublished = (req, res) => {
   
 };
