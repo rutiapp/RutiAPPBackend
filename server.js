@@ -5,7 +5,7 @@ const dotenv = require('dotenv')
 //using .env variables
 dotenv.config()
 var corsOptions = {
-  origin: process.env.FRONT_APP+":"+process.env.FRONT_APP_PORT
+  origin: process.env.FRONT_APP
 };
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
