@@ -17,7 +17,7 @@ exports.create = (req, res) => {
   // Create a Exersise
   const weight = {
     quantity_kg: req.body.quantity_kg,
-    userId: req.body.userId,
+    userId: req.userId,
     exersiseId: req.body.exersiseId
   };
   // Save Exersises in the database
@@ -49,7 +49,7 @@ exports.findAll = (req, res) => {
 
 // Retrieve all Weights from the database.
 exports.findAllByUserAndExersise = (req, res) => {
-  const userId = req.params.userId;
+  const userId = req.userId;
   const exersiseId = req.params.exersiseId;
   var condition = { userId: userId, exersiseId: exersiseId }
   var order = 
@@ -71,7 +71,7 @@ exports.findAllByUserAndExersise = (req, res) => {
 
 // Find last weight added to exersise
 exports.findLastByUserAndExersise = (req, res) => {
-  const userId = req.params.userId;
+  const userId = req.userId;
   const exersiseId = req.params.exersiseId;
   var condition = { userId: userId, exersiseId: exersiseId }
   var order = 
@@ -113,7 +113,7 @@ const id = req.params.id;
 
 //find all weights by user order by creation
 exports.findLastByUser = (req, res) => {
-  const userId = req.params.userId;
+  const userId = req.userId;
   var condition = { userId: userId }
   var order = 
     ['createdAt', 'DESC']

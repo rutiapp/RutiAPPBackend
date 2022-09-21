@@ -21,7 +21,7 @@ exports.create = (req, res) => {
     series: req.body.series,
     repetitions: req.body.repetitions,
     help_url: req.body.help_url,
-    creatorId: req.body.creatorId
+    creatorId: req.userId
   };
   // Save Exersises in the database
   Exersises.create(exersise)
@@ -52,20 +52,17 @@ exports.findAll = (req, res) => {
 
 // Retrieve all Exersises from the database.
 exports.findAllByCreator = (req, res) => {
-
-  const creatorId = req.query.creatorId;
-  var condition = creatorId ? { creatorId: creatorId } : null;
-  Exersises.findAll({ where: condition })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving exersises."
+    var condition = { creatorId: req.userId }
+    Exersises.findAll({ where: condition })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while retrieving exersises."
+        });
       });
-    });
-  
 };
 // Find a single Exersise with an id
 exports.findById = (req, res) => {
