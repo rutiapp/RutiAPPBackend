@@ -15,19 +15,19 @@ module.exports = function(app) {
   )
 
   app.get(
-    "/api/weights/findWeightsByExersise/:userId/:exersiseId",
+    "/api/weights/findWeightsByExersise/:exersiseId",
     [authJwt.verifyToken],
     weightController.findAllByUserAndExersise
   )
 
   app.get(
-    "/api/weights/findLastWeightByExersise/:userId/:exersiseId",
+    "/api/weights/findLastWeightByExersise/:exersiseId",
     [authJwt.verifyToken],
     weightController.findLastByUserAndExersise
   )
 
   app.get(
-    "/api/weights/findLastWeightsByUser/:userId",
+    "/api/weights/findLastWeightsByUser",
     [authJwt.verifyToken],
     weightController.findLastByUser
   )

@@ -14,7 +14,7 @@ module.exports = function(app) {
     exersiseController.create
   );
   app.get(
-    "/api/exersises/findAllByCreator/:creatorId",
+    "/api/exersises/findAllByCreator",
     [authJwt.verifyToken],
     exersiseController.findAllByCreator
   );
