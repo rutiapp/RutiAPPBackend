@@ -117,7 +117,7 @@ exports.findLastByUser = (req, res) => {
   var condition = { userId: userId }
   var order = 
     ['createdAt', 'DESC']
-  Weights.findAll({ where: condition,order:[order],limit:10,
+  Weights.findAll({ where: condition,order:[order],limit:5,
       include: [{
       model: Exersises,
       as: 'exersise',
