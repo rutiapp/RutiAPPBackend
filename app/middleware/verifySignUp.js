@@ -44,10 +44,14 @@ checkCaptcha = async (req, res, next) => {
       }
       verify(RECAPTCHA_SERVER_KEY, token)
       .then((data) => {
+        console.log(data)
         if (data.success === true) {
           next()
         } else {
-          console.log('verification failed');
+          console.log('verification failed')
+          return res.status(403).send({
+            message: "Ha fallado la verificacion del captcha"
+          })
         }
       })
   .catch(console.error);
