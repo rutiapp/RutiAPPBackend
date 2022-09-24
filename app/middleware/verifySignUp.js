@@ -35,8 +35,10 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
 checkCaptcha = async (req, res, next) => {
   const APP_CAPCHA_ON = process.env.APP_CAPCHA_ON
   if(APP_CAPCHA_ON === "true") {
-      let token = req.headers["x-captcha-token"];
+      let token = req.headers["x-captcha-token"]
+      console.log(token)
       const RECAPTCHA_SERVER_KEY = process.env.RECAPTCHA_SERVER_KEY
+      console.log(RECAPTCHA_SERVER_KEY)
       if (!token) {
         return res.status(403).send({
           message: "No se ha entrado Token captcha"
