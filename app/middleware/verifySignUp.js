@@ -50,7 +50,7 @@ checkCaptcha = async (req, res, next) => {
       },
       body: `secret=${RECAPTCHA_SERVER_KEY}&response=${token}`
     })
-      .then(res => res.json())
+      .then(res => console.log(res.json()))
       .then(() => {
         next()})
       .catch(err => {
