@@ -1,6 +1,7 @@
 const db = require("../models")
 const ROLES = db.ROLES
 const User = db.user
+const {verify} = require('hcaptcha');
 checkDuplicateUsernameOrEmail = (req, res, next) => {
   // Username
   User.findOne({
@@ -41,29 +42,15 @@ checkCaptcha = async (req, res, next) => {
           message: "No se ha entrado Token captcha"
         })
       }
-      // Validate Human
-      const isHuman = await fetch(`https://hcaptcha.com/siteverify`, {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-      },
-      body: `secret=${RECAPTCHA_SERVER_KEY}&response=${token}`
-    })
-      .then(res => console.log(res.json()))
-      .then(() => {
-        next()})
-      .catch(err => {
-        return res.status(500).send({
-          message: "Error al comprobar el token"
-        })
+      verify(RECAPTCHA_SERVER_KEY, token)
+      .then((data) => {
+        if (data.success === true) {
+          next()
+        } else {
+          console.log('verification failed');
+        }
       })
-
-    if (humanKey === null || !isHuman) {
-      return res.status(403).send({
-        message: "YOU ARE NOT HUMAN!"
-      })
-    }
+  .catch(console.error);
   } else {
     next()
   }
