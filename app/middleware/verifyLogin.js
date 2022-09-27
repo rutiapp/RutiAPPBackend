@@ -20,6 +20,8 @@ checkCaptcha = async (req, res, next) => {
           })
         }
       }).catch(console.error)
+      } else {
+        next()
       }
   } else {
     next()
