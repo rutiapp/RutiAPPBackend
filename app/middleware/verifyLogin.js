@@ -6,15 +6,9 @@ checkCaptcha = async (req, res, next) => {
   const APP_CAPCHA_ON = process.env.APP_CAPCHA_ON
   if(APP_CAPCHA_ON === "true") {
       let token = req.headers["x-captcha-token"]
-      console.log(token)
       const RECAPTCHA_SERVER_KEY = process.env.RECAPTCHA_SERVER_KEY
-      console.log(RECAPTCHA_SERVER_KEY)
-      if (!token) {
-        return res.status(403).send({
-          message: "No se ha entrado Token captcha"
-        })
-      }
-      verify(RECAPTCHA_SERVER_KEY, token)
+      if (token) {
+        verify(RECAPTCHA_SERVER_KEY, token)
       .then((data) => {
         console.log(data)
         if (data.success === true) {
@@ -25,8 +19,8 @@ checkCaptcha = async (req, res, next) => {
             message: "Ha fallado la verificacion del captcha"
           })
         }
-      })
-  .catch(console.error)
+      }).catch(console.error)
+      }
   } else {
     next()
   }
