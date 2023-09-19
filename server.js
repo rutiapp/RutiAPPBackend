@@ -4,17 +4,8 @@ const app = express();
 const dotenv = require('dotenv')
 //using .env variables
 dotenv.config()
-const allowedOrigins = [
-  '*'
-];
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Origin not allowed by CORS'));
-    }
-  },
+var corsOptions = {
+  origin: '*'
 };
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
