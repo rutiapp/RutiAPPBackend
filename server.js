@@ -4,8 +4,22 @@ const app = express();
 const dotenv = require('dotenv')
 //using .env variables
 dotenv.config()
-var corsOptions = {
-  origin: process.env.FRONT_APP
+const allowedOrigins = [
+  'capacitor://localhost',
+  'ionic://localhost',
+  'http://localhost',
+  'http://localhost:8080',
+  'http://localhost:8100',
+  process.env.FRONT_APP
+];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origin not allowed by CORS'));
+    }
+  },
 };
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
@@ -29,11 +43,11 @@ db.sequelize.sync().then(() => {
 });
 function initial() {
   Role.create({
-    id:1,
+    id: 1,
     name: "user"
   });
   Role.create({
-    id:2,
+    id: 2,
     name: "admin"
   });
 }
