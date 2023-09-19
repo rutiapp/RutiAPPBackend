@@ -5,12 +5,7 @@ const dotenv = require('dotenv')
 //using .env variables
 dotenv.config()
 const allowedOrigins = [
-  'capacitor://localhost',
-  'ionic://localhost',
-  'http://localhost',
-  'http://localhost:8080',
-  'http://localhost:8100',
-  process.env.FRONT_APP
+  '*'
 ];
 const corsOptions = {
   origin: (origin, callback) => {
@@ -21,7 +16,7 @@ const corsOptions = {
     }
   },
 };
-//app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 // parse requests of content-type - application/json
 app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
