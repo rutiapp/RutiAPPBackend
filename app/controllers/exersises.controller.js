@@ -51,36 +51,52 @@ exports.findAll = (req, res) => {
 };
 
 // Retrieve all Exersises from the database.
-exports.findAllByCreator = (req, res) => {
-  var condition = { creatorId: req.userId }
-  Exersises.findAll({ where: condition })
-    .then(data => {
-      data.map((exersise) => {
-        const userId = exersise.creatorId;
-        const exersiseId = exersise.id;
-        var condition = { userId: userId, exersiseId: exersiseId }
-        var order =
-          ['createdAt', 'DESC']
+exports.findAllByCreator = async (req, res) => {
+  const condition = { creatorId: req.userId }
 
-        Weights.findOne({
-          where: condition, order: [order]
+  await Exersises.findAll({ where: condition })
+    .then(data => {
+      // Use map to create an array of promises for Weights queries
+      const promises = data.map(exercise => {
+        const userId = exercise.creatorId;
+        const exersiseId = exercise.id;
+        const conditionWeights = { userId: userId, exersiseId: exersiseId };
+        const order = [['createdAt', 'DESC']];
+
+        return Weights.findOne({
+          where: conditionWeights,
+          order: order
         })
-          .then(data => {
-            exersise.lastWeight = data.weight;
+          .then(weights => {
+            if (weights) {
+              return {
+                ...exercise,
+                lastWeight: weights.quantity_kg,
+              };
+            }
+            return { ...exercise }
           })
           .catch(err => {
-            res.status(500).send({
-              message:
-                err.message || "Some error occurred while retrieving weights."
-            });
+            console.error(`Error while fetching weights: ${err.message}`);
           });
-      })
-      res.send(data);
+      });
+
+      // Wait for all promises to resolve before sending the response
+      Promise.all(promises)
+        .then(updatedExercises => {
+          console.log("Updated Exercises:" + updatedExercises[1].lastWeight);
+          res.send(updatedExercises);
+        })
+        .catch(err => {
+          console.error(`Error while processing promises: ${err.message}`);
+          res.status(500).send({
+            message: err.message || "Some error occurred while retrieving weights."
+          });
+        });
     })
     .catch(err => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving exersises."
+        message: err.message || "Some error occurred while retrieving exercises."
       });
     });
 };
