@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Exersise
 exports.create = (req, res) => {
 
-    // Validate request
+  // Validate request
   if (!req.body.name) {
     res.status(400).send({
       message: "El nombre no puede estar vacio"
@@ -34,7 +34,7 @@ exports.create = (req, res) => {
           err.message || "Some error occurred while creating the Exersise."
       });
     });
-  
+
 };
 
 exports.findAll = (req, res) => {
@@ -52,21 +52,41 @@ exports.findAll = (req, res) => {
 
 // Retrieve all Exersises from the database.
 exports.findAllByCreator = (req, res) => {
-    var condition = { creatorId: req.userId }
-    Exersises.findAll({ where: condition })
-      .then(data => {
-        res.send(data);
+  var condition = { creatorId: req.userId }
+  Exersises.findAll({ where: condition })
+    .then(data => {
+      data.map((exersise) => {
+        const userId = exersise.creatorId;
+        const exersiseId = exersise.id;
+        var condition = { userId: userId, exersiseId: exersiseId }
+        var order =
+          ['createdAt', 'DESC']
+
+        Weights.findOne({
+          where: condition, order: [order]
+        })
+          .then(data => {
+            exersise.lastWeight = data.weight;
+          })
+          .catch(err => {
+            res.status(500).send({
+              message:
+                err.message || "Some error occurred while retrieving weights."
+            });
+          });
       })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving exersises."
-        });
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving exersises."
       });
+    });
 };
 // Find a single Exersise with an id
 exports.findById = (req, res) => {
-const id = req.params.id;
+  const id = req.params.id;
   Exersises.findByPk(id)
     .then(data => {
       if (data) {
@@ -82,21 +102,21 @@ const id = req.params.id;
         message: "Error retrieving Exersise with id=" + id
       });
     });
-  
+
 };
 // Update a Exersise by the id in the request
 exports.update = (req, res) => {
-  
+
 };
 // Delete a Exersise with the specified id in the request
 exports.delete = (req, res) => {
-  
+
 };
 // Delete all Exersise from the database.
 exports.deleteAll = (req, res) => {
-  
+
 };
 // Find all published Exersise
 exports.findAllPublished = (req, res) => {
-  
+
 };
