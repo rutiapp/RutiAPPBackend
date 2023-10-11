@@ -84,7 +84,6 @@ exports.findAllByCreator = async (req, res) => {
       // Wait for all promises to resolve before sending the response
       Promise.all(promises)
         .then(updatedExercises => {
-          console.log("Updated Exercises:" + updatedExercises[1].lastWeight);
           res.send(updatedExercises);
         })
         .catch(err => {
