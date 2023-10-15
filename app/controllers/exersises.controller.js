@@ -121,6 +121,26 @@ exports.findById = (req, res) => {
 };
 // Update a Exersise by the id in the request
 exports.update = (req, res) => {
+  const id = req.params.id;
+  Exersises.update(req.body, {
+    where: { id: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Exersise was updated successfully."
+        });
+      } else {
+        res.send({
+          message: `Cannot update Exersise with id=${id}. Maybe Exersise was not found or req.body is empty!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Exersise with id=" + id
+      });
+    });
 
 };
 // Delete a Exersise with the specified id in the request
